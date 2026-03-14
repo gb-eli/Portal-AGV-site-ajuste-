@@ -2,15 +2,19 @@
 // MENU HAMBURGUER
 // =============================
 
+console.log("script carregado");
+
 const menuToggle = document.getElementById("menuToggle");
 const dropdownMenu = document.getElementById("dropdownMenu");
 
-if (menuToggle && dropdownMenu) {
+console.log(menuToggle);
+console.log(dropdownMenu);
 
+if (menuToggle && dropdownMenu) {
     menuToggle.addEventListener("click", () => {
+        console.log("clicou no menu");
         dropdownMenu.classList.toggle("show");
     });
-
 }
 
 
@@ -21,9 +25,7 @@ if (menuToggle && dropdownMenu) {
 const form = document.getElementById("loginForm");
 
 if (form) {
-
     form.addEventListener("submit", async (event) => {
-
         event.preventDefault();
 
         const email = document.getElementById("email").value.trim();
@@ -41,33 +43,44 @@ if (form) {
         }
 
         try {
-
             const resposta = await fetch("http://localhost:3000/login", {
-
                 method: "POST",
-
                 headers: {
                     "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
                     email: email,
                     senha: senha
                 })
-
             });
 
-            const dados = await resposta.json();
+            
 
-            alert(dados.mensagem);
+const dados = await resposta.json();
+
+if (resposta.ok) {
+
+    alert(dados.mensagem);
+
+    if (dados.tipo === "aluno") {
+        window.location.href = "painel-aluno.html";
+    }
+
+    else if (dados.tipo === "admin") {
+        window.location.href = "painel-admin.html";
+    }
+
+    else if (dados.tipo === "responsavel") {
+        window.location.href = "painel-responsavel.html";
+    }
+
+} else {
+    alert(dados.mensagem);
+}
 
         } catch (erro) {
-
             console.error("Erro:", erro);
             alert("Erro ao conectar com o servidor.");
-
         }
-
     });
-
 }

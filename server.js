@@ -6,30 +6,37 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// TESTE DO SERVIDOR
-
 app.get("/", (req, res) => {
     res.send("Servidor do Portal AGV funcionando!");
 });
-
-// ROTA DE LOGIN
 
 app.post("/login", (req, res) => {
 
     const { email, senha } = req.body;
 
-    console.log("Login recebido:", email, senha);
-
     if (email === "aluno@escola" && senha === "1234") {
-
         return res.json({
-            mensagem: "Login realizado com sucesso!"
+            mensagem: "Login realizado",
+            tipo: "aluno"
         });
+    }
 
+    if (email === "admin@escola" && senha === "1234") {
+        return res.json({
+            mensagem: "Login realizado",
+            tipo: "admin"
+        });
+    }
+
+    if (email === "responsavel@escola" && senha === "1234") {
+        return res.json({
+            mensagem: "Login realizado",
+            tipo: "responsavel"
+        });
     }
 
     res.status(401).json({
-        mensagem: "Email ou senha inválidos."
+        mensagem: "Email ou senha inválidos"
     });
 
 });
@@ -37,4 +44,3 @@ app.post("/login", (req, res) => {
 app.listen(3000, () => {
     console.log("Servidor rodando na porta 3000");
 });
-
