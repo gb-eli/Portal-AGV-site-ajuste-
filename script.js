@@ -1,86 +1,136 @@
 // =============================
-// MENU HAMBURGUER
+// MENU HAMBÚRGUER
 // =============================
-
-console.log("script carregado");
-
-const menuToggle = document.getElementById("menuToggle");
-const dropdownMenu = document.getElementById("dropdownMenu");
-
-console.log(menuToggle);
-console.log(dropdownMenu);
+const menuToggle = document.getElementById('menuToggle');
+const dropdownMenu = document.getElementById('dropdownMenu');
 
 if (menuToggle && dropdownMenu) {
-    menuToggle.addEventListener("click", () => {
-        console.log("clicou no menu");
-        dropdownMenu.classList.toggle("show");
-    });
-}
+  menuToggle.addEventListener('click', () => {
+    dropdownMenu.classList.toggle('show');
+  });
 
+  document.addEventListener('click', (event) => {
+    const clickedOutside = !menuToggle.contains(event.target) && !dropdownMenu.contains(event.target);
+    if (clickedOutside) {
+      dropdownMenu.classList.remove('show');
+    }
+  });
+}
 
 // =============================
 // LOGIN
 // =============================
-
-const form = document.getElementById("loginForm");
+const form = document.getElementById('loginForm');
+const loginMessage = document.getElementById('loginMessage');
 
 if (form) {
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-        const email = document.getElementById("email").value.trim();
-        const senha = document.getElementById("senha").value.trim();
-        const consent = document.getElementById("consent").checked;
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const senha = document.getElementById('senha').value.trim();
+    const consent = document.getElementById('consent').checked;
 
-        if (!email || !senha) {
-            alert("Preencha todos os campos.");
-            return;
-        }
-
-        if (!consent) {
-            alert("Você precisa aceitar os termos.");
-            return;
-        }
-
-        try {
-            const resposta = await fetch("http://localhost:3000/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email: email,
-                    senha: senha
-                })
-            });
-
-            
-
-const dados = await resposta.json();
-
-if (resposta.ok) {
-
-    alert(dados.mensagem);
-
-    if (dados.tipo === "aluno") {
-        window.location.href = "painel-aluno.html";
+    if (!email || !senha) {
+      showMessage('Preencha todos os campos.', true);
+      return;
     }
 
-    else if (dados.tipo === "admin") {
-        window.location.href = "painel-admin.html";
+    if (!consent) {
+      showMessage('Você precisa aceitar os termos.', true);
+      return;
     }
 
-    else if (dados.tipo === "responsavel") {
-        window.location.href = "painel-responsavel.html";
-    }
+    try {
+      const resposta = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ email, senha }),
+      });
 
-} else {
-    alert(dados.mensagem);
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        showMessage(dados.mensagem || 'Falha no login.', true);
+        return;
+      }
+
+      showMessage(dados.mensagem, false);
+      window.location.href = dados.redirect;
+    } catch (erro) {
+      console.error('Erro:', erro);
+      showMessage('Erro ao conectar com o servidor.', true);
+    }
+  });
 }
 
-        } catch (erro) {
-            console.error("Erro:", erro);
-            alert("Erro ao conectar com o servidor.");
-        }
+function showMessage(message, isError) {
+  if (!loginMessage) {
+    alert(message);
+    return;
+  }
+
+  loginMessage.textContent = message;
+  loginMessage.className = isError ? 'status-message error' : 'status-message success';
+}
+
+// =============================
+// SESSÃO / LOGOUT / PERFIL
+// =============================
+const userNameEl = document.getElementById('userName');
+const userRoleEl = document.getElementById('userRole');
+const logoutButton = document.getElementById('logoutButton');
+
+async function loadSession() {
+  const needsSession = document.body?.dataset?.requireAuth === 'true';
+  if (!needsSession && !userNameEl && !logoutButton) return;
+
+  try {
+    const response = await fetch('/me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' },
     });
+
+    if (response.status === 401) {
+      if (needsSession) {
+        window.location.href = '/login';
+      }
+      return;
+    }
+
+    const data = await response.json();
+
+    if (userNameEl && data.usuario?.nome) {
+      userNameEl.textContent = data.usuario.nome;
+    }
+
+    if (userRoleEl && data.usuario?.tipo) {
+      userRoleEl.textContent = formatRole(data.usuario.tipo);
+    }
+  } catch (error) {
+    console.error('Falha ao consultar sessão:', error);
+  }
 }
+
+function formatRole(role) {
+  if (role === 'admin') return 'Administrador';
+  if (role === 'responsavel') return 'Responsável';
+  return 'Aluno';
+}
+
+if (logoutButton) {
+  logoutButton.addEventListener('click', async () => {
+    try {
+      await fetch('/logout', {
+        method: 'POST',
+        credentials: 'same-origin',
+      });
+    } finally {
+      window.location.href = '/login';
+    }
+  });
+}
+
+loadSession();

@@ -202,3 +202,74 @@ body{
 .dropdown-menu.show{
     display:block;
 }
+
+.login-main{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.login-container{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap:24px;
+    align-items:start;
+}
+
+.login-form, .demo-box{
+    background: rgba(255,255,255,0.08);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.16);
+}
+
+.form-group, .form-check, .form-submit{
+    margin-bottom:16px;
+}
+
+.form-group label, .form-check label{
+    display:block;
+    margin-bottom:8px;
+}
+
+.form-group input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+}
+
+.login-button{
+    background:#37c7c7;
+    border:none;
+    padding:12px 22px;
+    border-radius:30px;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.status-message{
+    min-height: 24px;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.status-message.error{
+    color: #ffd6d6;
+}
+
+.status-message.success{
+    color: #d9ffe7;
+}
+
+.session-box{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+ul{
+    list-style-position: inside;
+}

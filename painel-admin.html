@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Administrador - Portal AGV</title>
     <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
 </head>
-<body>
-
+<body data-require-auth="true">
     <header class="header">
         <div class="logo-area">
             <img src="img/logo.png" alt="Logo Portal AGV" class="logo">
             <h1 class="portal-title">Portal AGV</h1>
+        </div>
+        <div class="session-box">
+            <span><strong id="userName">Usuário</strong> — <span id="userRole">Administrador</span></span>
+            <button id="logoutButton" class="login-btn" type="button">Sair</button>
         </div>
     </header>
 
@@ -19,21 +23,16 @@
         <h2 class="hero-title">Painel do Administrador</h2>
 
         <section class="cta">
-            <a href="#" class="cta-button">Gerenciar Livros</a>
+            <a href="/suporte" class="cta-button">Avisos e suporte</a>
         </section>
 
-        <section class="cta">
-            <a href="#" class="cta-button">Gerenciar Usuários</a>
-        </section>
-
-        <section class="cta">
-            <a href="#" class="cta-button">Avisos do Portal</a>
+        <section class="about">
+            <p>Área administrativa protegida por sessão e validação de perfil no backend.</p>
         </section>
     </main>
 
     <footer class="footer">
         <p>© 2026 Portal AGV</p>
     </footer>
-
 </body>
 </html>

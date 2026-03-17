@@ -5,30 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca - Portal AGV</title>
     <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
 </head>
-<body>
-
+<body data-require-auth="true">
     <header class="header">
         <div class="logo-area">
             <img src="img/logo.png" alt="Logo Portal AGV" class="logo">
             <h1 class="portal-title">Biblioteca</h1>
+        </div>
+        <div class="session-box">
+            <span><strong id="userName">Usuário</strong> — <span id="userRole">Perfil</span></span>
+            <button id="logoutButton" class="login-btn" type="button">Sair</button>
         </div>
     </header>
 
     <main class="about">
         <h2>Livros disponíveis</h2>
         <ul>
-<li>Dom Casmurro — Machado de Assis</li>
-<li>O Cortiço — Aluísio Azevedo</li>
-<li>Capitães da Areia — Jorge Amado</li>
-</ul>
+            <li>Dom Casmurro — Machado de Assis</li>
+            <li>O Cortiço — Aluísio Azevedo</li>
+            <li>Capitães da Areia — Jorge Amado</li>
+        </ul>
         <br>
-        <a href="painel-aluno.html" class="cta-button">Voltar ao painel</a>
+        <a href="javascript:history.back()" class="cta-button">Voltar</a>
     </main>
 
     <footer class="footer">
         <p>© 2026 Portal AGV</p>
     </footer>
-
 </body>
 </html>
